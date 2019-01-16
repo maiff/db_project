@@ -1,3 +1,4 @@
+from bplustree import BPlusTree
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """NoSQL database written in Python"""
@@ -9,7 +10,6 @@ import time
 import utils as u
 u.prepareCryptTable()
 # import b_plus_tree as bt
-from bplustree import BPlusTree
 tree = BPlusTree('./test.db', order=50)
 
 HOST = 'localhost'
@@ -58,7 +58,10 @@ def parse_message(data):
     value cast to the appropriate type."""
     # print(data)
     try:
-        command, key, value, value_type = map(str.strip, data.strip().split(';'))
+        splited_data = [s.strip() for s in data.strip().split(';')]
+        splited_data += [None] * (4 - len(splited_data))
+        command, key, value, value_type = splited_data
+        command = command.upper()
         key = u.HashString(key)
 
     except ValueError:
@@ -184,7 +187,7 @@ def main():
             time.strftime(("%Y/%m/%d %H:%M:%S INFO"), time.localtime()),
             address))
         data = connection.recv(1024).decode()
-        print('rece data:'+data)
+        print('rece data:' + data)
         if data.strip() == '' or data.strip() == 'exit':
             connection.close()
             connection, address = SOCKET.accept()
