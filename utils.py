@@ -16,7 +16,7 @@ def prepareCryptTable():
         index2+=0x100
       index1+=1
 
-def HashString(key, dwHashType):
+def HashString(key, dwHashType=1):
     seed1, seed2 = 0x7FED7FED, 0xEEEEEEEE
     key = key.upper()
     for i in range(len(key)):
